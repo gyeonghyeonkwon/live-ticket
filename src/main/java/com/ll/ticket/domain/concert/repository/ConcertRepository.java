@@ -2,12 +2,14 @@ package com.ll.ticket.domain.concert.repository;
 
 import com.ll.ticket.domain.concert.entity.Concert;
 import com.ll.ticket.global.enums.ConcertCategory;
+import com.ll.ticket.global.enums.ConcertStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 public interface ConcertRepository extends JpaRepository<Concert, Long> {
     Page<Concert> findAll(Pageable pageable);
@@ -32,5 +34,5 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
             "AND c.status = 'ENABLE'")
     List<Concert> findByCategoryConcerts(@Param("type") ConcertCategory type);
 
-
+    List<Concert> findByReleaseTimeLessThanEqualAndStatus(LocalDateTime todayDateTime, ConcertStatus concertStatus);
 }
