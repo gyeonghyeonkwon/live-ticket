@@ -1,5 +1,6 @@
 package com.ll.ticket.domain.concert.service;
 
+import com.ll.ticket.domain.concert.dto.ConcertIdPathDTO;
 import com.ll.ticket.domain.concert.dto.ConcertResponse;
 import com.ll.ticket.domain.concert.entity.*;
 import com.ll.ticket.domain.concert.repository.ConcertDateRepository;
@@ -57,6 +58,41 @@ public class ConcertService {
         return this.concertRepository.findAll(pageable);
     }
 
+    public List<ConcertIdPathDTO> getLatestConcertList() {
+        Long id;
+        String path;
+        List<Concert> concerts = this.concertRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate"));
+
+        List<ConcertIdPathDTO> concertIdPaths = new ArrayList<>();
+
+        for (Concert concert : concerts) {
+            id = concert.getConcertId();
+            path = concert.getImages().get(0).getPath();
+
+            ConcertIdPathDTO concertIdPathDTO = ConcertIdPathDTO.builder()
+                    .concertId(id)
+                    .path(path)
+                    .build();
+            concertIdPaths.add(concertIdPathDTO);
+        }
+
+        return concertIdPaths;
+    }
+
+    public List<Concert> getEarliestConcertList(){
+        List<ConcertDate> concertDates = this.concertDateRepository.findAll(Sort.by(Sort.Direction.ASC, "startTime"));
+        List<Concert> concerts = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            concerts.add(concertDates.get(i).getConcert());
+        }
+        /*for (ConcertDate concertDate : concertDates) {
+            concerts.add(cconcertDate.getConcert());
+        }*/
+
+        return concerts;
+    }
+
     public Concert findById(Long id) {
         Optional<Concert> concert = concertRepository.findById(id);
         if (concert.isPresent()) {
@@ -65,7 +101,6 @@ public class ConcertService {
             throw new IllegalArgumentException("존재하지 않는 공연입니다.");
         }
     }
-
 
     public List<ConcertDate> findConcertDateByConcert(Concert concert) {
         return concertDateRepository.findAllByConcert(concert);

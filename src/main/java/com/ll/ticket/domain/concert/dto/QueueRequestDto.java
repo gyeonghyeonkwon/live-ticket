@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class QueueRequestDto {
     private String concertId;
     private String memberId;
+
+
 }

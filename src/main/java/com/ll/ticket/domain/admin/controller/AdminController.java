@@ -90,7 +90,7 @@ public class AdminController {
 
         return "domain/admin/concert_detail";
     }
-
+/*
     //콘서트 글 수정
     @GetMapping("/modifyConcert/{id}")
     public String modifyConcert(RegisterConcertDto registerConcertDto, @PathVariable("id") Long id, Model model){
@@ -130,8 +130,9 @@ public class AdminController {
         List<ConcertDate> concertDates = this.concertService.findConcertDates(concert);
 
         this.adminService.modify(registerConcertDto, concert, place, concertPerformer, concertDates);
-        return String.format("redirect:/admin//concertDetail/%s", id);
+        return String.format("redirect:/admin/concertDetail/%s", id);
     }
+*/
 
     //콘서트 글 삭제
     @GetMapping(value = "/deleteConcert/{id}")

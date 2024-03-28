@@ -1,5 +1,8 @@
 package com.ll.ticket;
 
+import com.ll.ticket.domain.concert.dto.ConcertIdPathDTO;
+import com.ll.ticket.domain.concert.entity.Concert;
+import com.ll.ticket.domain.concert.service.ConcertService;
 import com.ll.ticket.domain.member.entity.Member;
 import com.ll.ticket.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -16,6 +21,7 @@ import java.util.Optional;
 public class HomeController {
 
     private final MemberService memberService;
+    private final ConcertService concertService;
 
     @GetMapping("/")
     public String mainPage(Model model) {
@@ -31,6 +37,13 @@ public class HomeController {
             model.addAttribute("loginUser", true);
             model.addAttribute("member", _member.get());
         }
+
+        List<ConcertIdPathDTO> latestConcerts = this.concertService.getLatestConcertList();
+        model.addAttribute("latestConcerts", latestConcerts);
+
+        List<Concert> earliestConcerts = this.concertService.getEarliestConcertList();
+        model.addAttribute("earliestConcerts", earliestConcerts);
+
         return "main";
     }
 }

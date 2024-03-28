@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -59,5 +60,5 @@ public class RegisterConcertDto {
     @Min(0)
     private int seatPrice;
 
-    private MultipartFile image;
+    private List<MultipartFile> image;
 }
