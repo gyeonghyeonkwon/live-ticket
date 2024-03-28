@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +34,14 @@ public class ConcertService {
     private final SeatRepository seatRepository;
 
     @Transactional
-    public void changeStatus(LocalDate todayDate) {
-        LocalDate enableStartDate = todayDate.minusDays(1);
-        LocalDate ableStartDate = todayDate.plusDays(2);
-        LocalDate ableEndDate = todayDate.plusWeeks(1);
+    public void changeStatus(LocalDateTime todayDateTime) {
+        LocalDateTime ableStartDateTime = todayDateTime.plusDays(2);
 
-        changeConcertStatusInRange(enableStartDate, todayDate, ConcertStatus.ENABLE);
-        changeConcertStatusInRange(ableStartDate, ableEndDate, ConcertStatus.ABLE);
+        concertRepository.findByReleaseTimeLessThanEqualAndStatus(todayDateTime, ConcertStatus.ABLE)
+                .forEach(concert -> concert.setStatus(ConcertStatus.ENABLE));
+
+        concertDateRepository.findByStartTimeLessThanEqual(ableStartDateTime)
+                .forEach(concertDate -> concertDate.getConcert().setStatus(ConcertStatus.ABLE));
     }
 
     private void changeConcertStatusInRange(LocalDate startDate, LocalDate endDate, ConcertStatus status) {

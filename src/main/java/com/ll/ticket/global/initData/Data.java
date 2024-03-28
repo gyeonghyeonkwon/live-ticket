@@ -19,16 +19,9 @@ public class Data {
     public ApplicationRunner initAll() {
         return args -> {
             long now = System.currentTimeMillis();
-            for (int i = 1000; i < 1050; i++) {
-                redisTemplate.opsForZSet().add(String.valueOf(13), String.valueOf(i), now);
+            for (int i = 1000; i < 1099; i++) {
+                redisTemplate.opsForZSet().add(String.valueOf(3), String.valueOf(i), now);
             }
-
-            for (int i = 1000; i < 1010; i++) {
-                redisTemplate.opsForZSet().add(String.valueOf(16), String.valueOf(i), now);
-            }
-
-//            memberService.findByUserId(6L).ifPresent(member -> queueService.addQueue("대기열", member));
-//            memberService.findByUserId(47L).ifPresent(member -> queueService.addQueue("대기열", member));
         };
     }
 }

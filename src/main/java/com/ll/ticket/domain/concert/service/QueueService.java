@@ -25,7 +25,7 @@ public class QueueService {
     }
 
     public void processQueue(String eventName) {
-        Set<String> queue = redisTemplate.opsForZSet().range(eventName, 0, 0);
+        Set<String> queue = redisTemplate.opsForZSet().range(eventName, 0, 4);
 
         for (String memberId : queue) {
             redisTemplate.opsForZSet().remove(eventName, memberId);
