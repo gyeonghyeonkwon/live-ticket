@@ -19,7 +19,7 @@ public class Data {
     public ApplicationRunner initAll() {
         return args -> {
             long now = System.currentTimeMillis();
-            for (int i = 1000; i < 1050; i++) {
+            for (int i = 1000; i < 1099; i++) {
                 redisTemplate.opsForZSet().add(String.valueOf(3), String.valueOf(i), now);
             }
         };

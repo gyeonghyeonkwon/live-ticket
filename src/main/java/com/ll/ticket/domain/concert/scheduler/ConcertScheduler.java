@@ -25,15 +25,12 @@ public class ConcertScheduler {
          concertService.changeStatus(todayDateTime);
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 500)
     private void queueEventScheduler() {
         Set<String> keys = redisTemplate.keys("*");
         for (String key : keys) {
             queueService.processQueue(key);
             queueService.listQueue(key);
         }
-
-//        queueService.listQueue("대기열");
-//        queueService.processQueue("대기열");
     }
 }
