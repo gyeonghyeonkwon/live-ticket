@@ -25,10 +25,8 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
             "AND c.status = 'ENABLE'")
     List<Concert> findByConcertKeyword(@Param("keyword") String keyword);
 
-    @Query("SELECT distinct c FROM Concert c " +
-            "left join fetch c.place p " +
-            "left join fetch c.concertPerformer cp " +
-            "left join fetch c.images i " +
+    @Query("SELECT c FROM Concert c " +
+            "join fetch c.images i " +
             "join c.concertDates cd " +
             "WHERE c.category = :type " +
             "AND c.status = 'ENABLE'")

@@ -198,7 +198,7 @@
                                         <a class="card card-shopping" style="cursor: pointer; width: 100%;">
                                             <figure class="card-img-top"
                                                     th:onclick="|redirectToProduct('${concert1.concertId}')|">
-                                                <img class="card-img-top" th:src="${concert1.getImages().get(0)}"
+                                                <img class="card-img-top" th:src="${concert1.images[0].path}"
                                                      th:href="@{'/concert/detail/' + ${concert1.concertId}}"
                                                      alt="스와이퍼 이미지">
                                             </figure>
@@ -209,8 +209,8 @@
                                                     <!--                                                    <p class="card-text"-->
                                                     <!--                                                       th:text="${#numbers.formatInteger(concert.seatPrice, 3, 'COMMA') + '원'}"></p>-->
                                                     <div th:each="date : ${concert1.concertDates}">
-                                                        <p class="card-text"
-                                                           th:text="${date.concertDate}"></p>
+                                                        <p class="card-text concertDates"
+                                                           th:text="${date.startTime}"></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -232,6 +232,26 @@
             var productUrl = '/concert/detail/' + productId;
             window.location.href = productUrl;
         }
+
+        function formatDate(dateString) {
+            var date = new Date(dateString); // 날짜 문자열을 Date 객체로 변환
+            var formattedDate = date.toISOString().split('T')[0]; // ISO 형식의 문자열에서 'T' 이전 부분 추출 (날짜 부분만)
+            return formattedDate; // 포맷된 날짜 반환
+        }
+
+        // 페이지 로드 후 실행되는 함수
+        document.addEventListener('DOMContentLoaded', function() {
+            // concertDates 클래스에 속한 모든 요소를 선택
+            var concertDates = document.querySelectorAll('.concertDates');
+
+            // 각 요소에 대해 작업 수행
+            concertDates.forEach(function(dateElement) {
+                // 요소의 텍스트 값을 가져와서 formatDate 함수로 포맷팅한 값으로 변경
+                var formattedDate = formatDate(dateElement.textContent.trim());
+                // 요소의 텍스트 값을 포맷된 값으로 변경
+                dateElement.textContent = formattedDate;
+            });
+        });
 
     </script>
 </div>
