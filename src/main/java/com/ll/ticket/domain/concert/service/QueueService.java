@@ -21,7 +21,7 @@ public class QueueService {
         String concertId = queueRequestDto.getConcertId();
         long now = System.currentTimeMillis();
 
-        redisTemplate.opsForZSet().add(concertId, memberId, now);
+        redisTemplate.opsForZSet().add("queue" + concertId, memberId, now);
     }
 
     public void processQueue(String eventName) {

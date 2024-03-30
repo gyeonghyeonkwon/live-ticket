@@ -27,7 +27,7 @@ public class ConcertScheduler {
 
     @Scheduled(fixedDelay = 500)
     private void queueEventScheduler() {
-        Set<String> keys = redisTemplate.keys("*");
+        Set<String> keys = redisTemplate.keys("queue*");
         for (String key : keys) {
             queueService.processQueue(key);
             queueService.listQueue(key);
