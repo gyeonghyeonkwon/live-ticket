@@ -21,11 +21,11 @@ public class QueueService {
         String concertId = queueRequestDto.getConcertId();
         long now = System.currentTimeMillis();
 
-        redisTemplate.opsForZSet().add(concertId, memberId, now);
+        redisTemplate.opsForZSet().add("queue" + concertId, memberId, now);
     }
 
     public void processQueue(String eventName) {
-        Set<String> queue = redisTemplate.opsForZSet().range(eventName, 0, 0);
+        Set<String> queue = redisTemplate.opsForZSet().range(eventName, 0, 4);
 
         for (String memberId : queue) {
             redisTemplate.opsForZSet().remove(eventName, memberId);

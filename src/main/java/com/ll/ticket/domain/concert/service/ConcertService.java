@@ -1,5 +1,6 @@
 package com.ll.ticket.domain.concert.service;
 
+import com.ll.ticket.domain.concert.dto.ConcertIdPathDTO;
 import com.ll.ticket.domain.concert.dto.ConcertResponse;
 import com.ll.ticket.domain.concert.entity.*;
 import com.ll.ticket.domain.concert.repository.ConcertDateRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +35,14 @@ public class ConcertService {
     private final SeatRepository seatRepository;
 
     @Transactional
-    public void changeStatus(LocalDate todayDate) {
-        LocalDate enableStartDate = todayDate.minusDays(1);
-        LocalDate ableStartDate = todayDate.plusDays(2);
-        LocalDate ableEndDate = todayDate.plusWeeks(1);
+    public void changeStatus(LocalDateTime todayDateTime) {
+        LocalDateTime ableStartDateTime = todayDateTime.plusDays(2);
 
-        changeConcertStatusInRange(enableStartDate, todayDate, ConcertStatus.ENABLE);
-        changeConcertStatusInRange(ableStartDate, ableEndDate, ConcertStatus.ABLE);
+        concertRepository.findByReleaseTimeLessThanEqualAndStatus(todayDateTime, ConcertStatus.ABLE)
+                .forEach(concert -> concert.setStatus(ConcertStatus.ENABLE));
+
+        concertDateRepository.findByStartTimeLessThanEqual(ableStartDateTime)
+                .forEach(concertDate -> concertDate.getConcert().setStatus(ConcertStatus.ABLE));
     }
 
     private void changeConcertStatusInRange(LocalDate startDate, LocalDate endDate, ConcertStatus status) {
@@ -55,6 +58,41 @@ public class ConcertService {
         return this.concertRepository.findAll(pageable);
     }
 
+    public List<ConcertIdPathDTO> getLatestConcertList() {
+        Long id;
+        String path;
+        List<Concert> concerts = this.concertRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate"));
+
+        List<ConcertIdPathDTO> concertIdPaths = new ArrayList<>();
+
+        for (Concert concert : concerts) {
+            id = concert.getConcertId();
+            path = concert.getImages().get(0).getPath();
+
+            ConcertIdPathDTO concertIdPathDTO = ConcertIdPathDTO.builder()
+                    .concertId(id)
+                    .path(path)
+                    .build();
+            concertIdPaths.add(concertIdPathDTO);
+        }
+
+        return concertIdPaths;
+    }
+
+    public List<Concert> getEarliestConcertList(){
+        List<ConcertDate> concertDates = this.concertDateRepository.findAll(Sort.by(Sort.Direction.ASC, "startTime"));
+        List<Concert> concerts = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            concerts.add(concertDates.get(i).getConcert());
+        }
+        /*for (ConcertDate concertDate : concertDates) {
+            concerts.add(cconcertDate.getConcert());
+        }*/
+
+        return concerts;
+    }
+
     public Concert findById(Long id) {
         Optional<Concert> concert = concertRepository.findById(id);
         if (concert.isPresent()) {
@@ -63,7 +101,6 @@ public class ConcertService {
             throw new IllegalArgumentException("존재하지 않는 공연입니다.");
         }
     }
-
 
     public List<ConcertDate> findConcertDateByConcert(Concert concert) {
         return concertDateRepository.findAllByConcert(concert);

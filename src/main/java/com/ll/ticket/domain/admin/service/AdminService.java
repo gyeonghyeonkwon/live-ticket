@@ -49,9 +49,7 @@ public class AdminService {
         LocalDateTime endTime = registerConcertDto.getEndTime();
         int runningTime = endTime.getHour() - startTime.getHour();
 
-        //업로드 된 이미지 처리
-        MultipartFile file = registerConcertDto.getImage();
-        String imageUrl = s3Service.createImage(file);
+
 //        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\uploadImages\\";
 //        UUID uuid = UUID.randomUUID();
 //        String fileName = uuid + "_" + file.getOriginalFilename();
@@ -75,18 +73,28 @@ public class AdminService {
         //Image 객체 빌드
         List<Image> images = new ArrayList<>();
 
-        Image image = Image.builder()
-                .concert(concert)
-                .name(file.getOriginalFilename())
-                .path(imageUrl)
-                .build();
+        List<MultipartFile> files = registerConcertDto.getImage();
+        String imageUrl;
 
-        images.add(image);
-        imageRepository.save(image);
+        for(int i = 0; i < registerConcertDto.getImage().size(); i++){
+            MultipartFile file = files.get(i);
+             imageUrl = s3Service.createImage(file);
+
+            Image image = Image.builder()
+                    .concert(concert)
+                    .name(file.getOriginalFilename())
+                    .path(imageUrl)
+                    .build();
+
+            images.add(image);
+            imageRepository.save(image);
+        }
+
 
         //Place 객체 빌드
         Place place = Place.builder()
                 .concert(concert)
+                .placeName(registerConcertDto.getPlaceName())
                 .longitude(registerConcertDto.getLongitude())
                 .latitude(registerConcertDto.getLatitude())
                 .totalPeople(registerConcertDto.getTotalPeople())

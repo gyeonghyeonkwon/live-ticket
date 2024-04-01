@@ -13,6 +13,7 @@ import com.ll.ticket.domain.place.entity.Place;
 import com.ll.ticket.domain.place.service.PlaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,6 +34,9 @@ public class AdminController {
     private final ConcertPerformerService concertPerformerService;
     private final PlaceService placeService;
 
+    @Value("${kakaoMap.javascript.key}")
+    private String mapApiKey;
+
     //관리자 페이지 메인화면
     @GetMapping(value = "/main")
     public String adminMain(){
@@ -42,7 +45,9 @@ public class AdminController {
 
     //콘서트 등록
     @GetMapping(value = "/registerConcert")
-    public String registerConcert(RegisterConcertDto registerConcertDto) {
+    public String registerConcert(RegisterConcertDto registerConcertDto, Model model) {
+        model.addAttribute("apiKey" , mapApiKey);
+
         return "domain/admin/register_concert";
     }
 
@@ -85,7 +90,7 @@ public class AdminController {
 
         return "domain/admin/concert_detail";
     }
-
+/*
     //콘서트 글 수정
     @GetMapping("/modifyConcert/{id}")
     public String modifyConcert(RegisterConcertDto registerConcertDto, @PathVariable("id") Long id, Model model){
@@ -125,8 +130,9 @@ public class AdminController {
         List<ConcertDate> concertDates = this.concertService.findConcertDates(concert);
 
         this.adminService.modify(registerConcertDto, concert, place, concertPerformer, concertDates);
-        return String.format("redirect:/admin//concertDetail/%s", id);
+        return String.format("redirect:/admin/concertDetail/%s", id);
     }
+*/
 
     //콘서트 글 삭제
     @GetMapping(value = "/deleteConcert/{id}")

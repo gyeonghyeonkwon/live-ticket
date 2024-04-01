@@ -125,6 +125,10 @@
                                 <td class="border px-4 py-2 text-xl" id="latitude" th:text="${place.latitude}"></td>
                             </tr>
                             <tr>
+                                <td class="border px-4 py-2 text-xl">장소명</td>
+                                <td class="border px-4 py-2 text-xl" id="placeName" th:text="${place.placeName}"></td>
+                            </tr>
+                            <tr>
                                 <td class="border px-4 py-2 text-xl">티켓 오픈 시간</td>
                                 <td class="border px-4 py-2 text-xl" th:text="${#temporals.format(concert.releaseTime, 'yyyy-MM-dd HH:mm')}"></td>
                             </tr>
@@ -158,13 +162,10 @@
                         </table>
                         <div th:each="image : ${images}">
                             <div>
-                                <img th:src="@{/uploadImages/{fileName}(fileName=${image.name})}" alt="Uploaded Image" class="max-w-xs">
+                                <img th:src="${image.getPath()}" alt="Image" class="max-w-xs">
                             </div>
                         </div>
                     </div>
-                    <!--카카오 지도 api-->
-                    <!--<div id="map" style="width:500px;height:400px;"></div>
-                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=801209c5d747fce299c6cb51a4cb0251"></script>-->
 
                     <div class="my-3">
                         <a th:href="@{|/admin/modifyConcert/${concert.concertId}|}" class="modify btn btn-lg btn-outline-secondary" th:text="수정"></a>
@@ -183,26 +184,6 @@
             var result = confirm("정말로 삭제하시겠습니까?");
             return result;
         }
-        var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-        var latitude = parseFloat(document.getElementById('latitude').innerText); // 위도 값 추출 및 변환
-        var longtitude = parseFloat(document.getElementById('longtitude').innerText); // 경도 값 추출 및 변환
-        var options = { //지도를 생성할 때 필요한 기본 옵션
-            center: new kakao.maps.LatLng(latitude, longtitude), //지도의 중심좌표.
-            level: 3 //지도의 레벨(확대, 축소 정도)
-        };
-
-        var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-
-        // 마커가 표시될 위치
-        var markerPosition  = new kakao.maps.LatLng(latitude, longtitude);
-
-        // 마커 생성
-        var marker = new kakao.maps.Marker({
-            position: markerPosition
-        });
-
-        // 마커가 지도 위에 표시되도록 설정
-        marker.setMap(map);
     </script>
 </div>
 

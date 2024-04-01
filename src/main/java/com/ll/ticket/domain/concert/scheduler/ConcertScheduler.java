@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Configuration
@@ -20,20 +20,17 @@ public class ConcertScheduler {
     @Scheduled(cron = "0 0 * * * *") // 운영-매일 0시
 //    @Scheduled(cron = "0 * * * * *") // 테스트용-매분 0초
     public void runConcertChangeStatus() {
-         LocalDate todayDate = LocalDate.now();
+         LocalDateTime todayDateTime = LocalDateTime.now();
 
-         concertService.changeStatus(todayDate);
+         concertService.changeStatus(todayDateTime);
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 500)
     private void queueEventScheduler() {
-        Set<String> keys = redisTemplate.keys("*");
+        Set<String> keys = redisTemplate.keys("queue*");
         for (String key : keys) {
             queueService.processQueue(key);
             queueService.listQueue(key);
         }
-
-//        queueService.listQueue("대기열");
-//        queueService.processQueue("대기열");
     }
 }

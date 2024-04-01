@@ -43,6 +43,10 @@ public class ConcertController {
     @GetMapping("/concert/category/{type}")
     public String getConcertByCategory(@PathVariable("type") String type, Model model, @AuthenticationPrincipal SecurityUser user) {
         List<Concert> concerts = concertService.categoryConcertList(type);
+        for (Concert concert : concerts) {
+            String image = concert.getImages().get(0).toString();
+            System.out.println(image);
+        }
         System.out.println("concerts.size() = " + concerts.size());
         model.addAttribute("concerts", concerts);
         model.addAttribute("member", user);
