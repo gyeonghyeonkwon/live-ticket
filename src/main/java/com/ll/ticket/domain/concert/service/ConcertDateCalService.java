@@ -36,6 +36,5 @@ public class ConcertDateCalService {
                 .orElse(Duration.ZERO);
     }
 
-
 }
 

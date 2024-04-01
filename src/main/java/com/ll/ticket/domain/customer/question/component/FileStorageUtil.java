@@ -16,6 +16,7 @@ public class FileStorageUtil {
 
     public String saveFile(MultipartFile multipartFile) {
 
+
         try {
                 //파일이 null 이 아니 거나 파일이 없지 않은 경우 if 문 실행
             if (multipartFile != null && !multipartFile.isEmpty()) { //파일을 업로드 하지 않았을경우 에 빈문자열 저장

@@ -23,7 +23,7 @@ public class StompRabbitMqBrokerConfig implements WebSocketMessageBrokerConfigur
         registry
                 .setApplicationDestinationPrefixes("/app")
                 .enableStompBrokerRelay("/topic","/exchange")
-                .setRelayHost("localhost")
+                .setRelayHost("host.docker.internal")
                 .setRelayPort(61613)
                 .setClientLogin("admin")
                 .setClientPasscode("admin")
