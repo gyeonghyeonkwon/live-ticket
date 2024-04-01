@@ -39,6 +39,7 @@ public class Concert extends BaseEntity {
     private List<ConcertDate> concertDates = new ArrayList<>();
 
     private LocalDateTime releaseTime;
+
     private int runningTime;
 
     @Enumerated(EnumType.STRING)
