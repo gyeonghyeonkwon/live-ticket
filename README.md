@@ -49,7 +49,7 @@
 </p>
 
 ## 🧱 ERD
-
+![liveticket](https://github.com/live-ticket/live-ticket/assets/131260371/0b269cb7-0877-4783-8f47-d0929fe1d97e)
 
 <br/>
 
