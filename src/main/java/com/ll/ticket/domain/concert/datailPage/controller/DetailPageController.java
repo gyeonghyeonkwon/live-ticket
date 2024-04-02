@@ -40,7 +40,7 @@ public class DetailPageController {
     private final ConcertDateService concertDateService;
 
     @Value("${kakaoMap.javascript.key}")
-    private String mapApiKey;
+    private String mapApiKey; //카카오맵 자바스크립트 키 
 
     @GetMapping("/detail/{id}")
     public String getConcert(@PathVariable Long id,
