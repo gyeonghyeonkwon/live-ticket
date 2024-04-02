@@ -294,7 +294,7 @@
                     <div class="comment-container">
                         <div class="mt-5" style="font-size: small">
 
-                            <span class="mt-3">작성자: <span th:text="${review.getAuthorName()}"></span></span> <!--사용자 이름 으로 작성-->
+                            <span class="mt-3">작성자: <span th:text="${review.getLoginId()}"></span></span> <!--사용자 이름 으로 작성-->
                             <span>&nbsp;&nbsp;&nbsp;</span>
                             <span>작성일: <span th:text="${#temporals.format(review.getCreatedDate(), 'yyyy-MM-dd HH:mm')}"></span></span>
                             <span>&nbsp;&nbsp;&nbsp;</span>

@@ -22,7 +22,7 @@
                 <!--작성자 표시-->
                 <div class="post-meta mt-[-22px]">
                     <span class="text-sm text-gray-500 mr-2">작성자:</span>
-                    <span th:if="${questionResponse.getAuthorName() != null}" th:text="${questionResponse.getAuthorName()}" class="text-sm text-gray-800"></span>
+                    <span th:if="${questionResponse.getLoginId() != null}" th:text="${questionResponse.getLoginId()}" class="text-sm text-gray-800"></span>
                 </div>
 
                 <!-- 수정, 삭제 버튼 숨김 처리 -->
